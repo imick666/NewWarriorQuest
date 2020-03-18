@@ -22,8 +22,15 @@ class Player{
         Enter your Nickname :
         """)
         if let entry = readLine(){
+            //check if player name already exist
+            for p in allPlayers{
+                guard entry != p.nickname else{
+                    return createPlayer(playerNumber, allPlayers: allPlayers)
+                }
+            }
             nickname = entry
         }
+        //create team
         //repeat until 3 characters in the team
         repeat{
             let character = createCharacter(allPlayers: allPlayers)
