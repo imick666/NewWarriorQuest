@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		E0AB85092420DA9800AD09AA /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AB85082420DA9800AD09AA /* main.swift */; };
+		E0AB85102420DAA300AD09AA /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AB850F2420DAA300AD09AA /* Player.swift */; };
+		E0AB85122420DB1300AD09AA /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AB85112420DB1300AD09AA /* Character.swift */; };
+		E0AB85142420DB7300AD09AA /* Weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AB85132420DB7300AD09AA /* Weapon.swift */; };
+		E0AB85162420DBFB00AD09AA /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AB85152420DBFB00AD09AA /* Game.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +29,10 @@
 /* Begin PBXFileReference section */
 		E0AB85052420DA9800AD09AA /* NewWarriorsQuest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = NewWarriorsQuest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0AB85082420DA9800AD09AA /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E0AB850F2420DAA300AD09AA /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		E0AB85112420DB1300AD09AA /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		E0AB85132420DB7300AD09AA /* Weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
+		E0AB85152420DBFB00AD09AA /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +66,10 @@
 			isa = PBXGroup;
 			children = (
 				E0AB85082420DA9800AD09AA /* main.swift */,
+				E0AB85152420DBFB00AD09AA /* Game.swift */,
+				E0AB850F2420DAA300AD09AA /* Player.swift */,
+				E0AB85112420DB1300AD09AA /* Character.swift */,
+				E0AB85132420DB7300AD09AA /* Weapon.swift */,
 			);
 			path = NewWarriorsQuest;
 			sourceTree = "<group>";
@@ -120,6 +132,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0AB85122420DB1300AD09AA /* Character.swift in Sources */,
+				E0AB85162420DBFB00AD09AA /* Game.swift in Sources */,
+				E0AB85142420DB7300AD09AA /* Weapon.swift in Sources */,
+				E0AB85102420DAA300AD09AA /* Player.swift in Sources */,
 				E0AB85092420DA9800AD09AA /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

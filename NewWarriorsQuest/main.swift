@@ -8,5 +8,15 @@
 
 import Foundation
 
-print("Hello, World!")
+print("""
+    Welcom in NewWarriorQuest
+
+    This game is a RPGLike for 2 players
+    Each player have to choose 3 characters
+
+    """)
+
+Game()
+
+
 
