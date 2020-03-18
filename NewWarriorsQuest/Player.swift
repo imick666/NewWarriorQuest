@@ -12,7 +12,7 @@ class Player{
     var playerNumber = 0
     var team = [Character]()
     
-    init(_ playerNumber: Int, allPlayers: [Player]) {
+    init(_ playerNumber: Int, in allPlayers: [Player]) {
         createPlayer(playerNumber, allPlayers: allPlayers)
     }
     
@@ -29,6 +29,7 @@ class Player{
                 }
             }
             nickname = entry
+            self.playerNumber = playerNumber
         }
         //create team
         //repeat until 3 characters in the team
