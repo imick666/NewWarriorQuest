@@ -29,7 +29,7 @@ class Character{
             self.weapon = .init(name: "Axe", attack: 150, heal: 0)
         case .Orcs:
             self.pv = 1000
-            self.weapon = .init(name: "Sword", attack: 100, heal: 0)
+            self.weapon = .init(name: "Sword", attack: 1000, heal: 0)
         }
     }
     

@@ -8,12 +8,16 @@
 
 import Foundation
 
+enum State{
+    case ongoing, over
+}
 //--------------------------
 //MARK: GAME
 //---------------------------
 class Game{
     var players = [Player]()
     var nbPlayers = 0
+    var state: State = .over
         
     init(){
         //pickup numbers of players
@@ -34,26 +38,38 @@ class Game{
             players.append(playerX)
         }
         
-        showTeams(players)
-        
-        for currentPlayer in players{
-            print("Player \(currentPlayer.playerNumber) : \(currentPlayer.nickname) ")
-            let currentCharacter = selectCharacter(currentPlayer)
-            print(currentCharacter.name)
-            whatToDo(for: currentPlayer, with: currentCharacter)
-            showTeams(players)
+        showTeams()
+        //--------------------------
+        //MARK: FIGHT
+        //--------------------------
+        state = .ongoing
+        while state == .ongoing{
+            //switch on each player to each round
+            for currentPlayer in players{
+                //print the current player
+                print("Player \(currentPlayer.playerNumber) : \(currentPlayer.nickname) ")
+                //select the current character
+                let currentCharacter = selectCharacter(currentPlayer)
+                //show wich character have been choose
+                print(currentCharacter.name)
+                //ask wich action to do
+                actions(for: currentPlayer, with: currentCharacter)
+                //check if characters are dead or if the game is over
+                checkState()
+            }
         }
+        
     }
     
     
     //-------------------------------------
     //MARK: PRIVATE FUNCTION
     //-------------------------------------
-    private func showTeams(_ players: [Player]){
-        for p in players{
-            print("\nPlayer \(p.playerNumber) | Nickname : \(p.nickname)")
-            for c in p.team{
-                print("\(c.name) :PV : \(c.pv) | Attack : \(c.weapon.attack)")
+    private func showTeams(){
+        for player in players{
+            print("\nPlayer \(player.playerNumber) | Nickname : \(player.nickname)")
+            for character in player.team{
+                print("\(character.name) :PV : \(character.pv) | Attack : \(character.weapon.attack)")
             }
         }
     }
@@ -69,21 +85,23 @@ class Game{
                 PV : \(character.pv) | Attack : \(character.weapon.attack)
                 """)
         }
-        if let entry = readLine(){
-            guard let answer = Int(entry) else{
-                print("Invalid entry, please choose a character")
-                return selectCharacter(currentPlayer)
-            }
-            guard (answer - 1) < currentPlayer.team.count else{
-                print("this player doesn't exist")
-                return selectCharacter(currentPlayer)
-            }
-            characterIndex = (answer - 1)
+        guard let entry = Int(readLine()!) else{
+            print("Invalid entry, please choose a character")
+            return selectCharacter(currentPlayer)
         }
+        switch entry{
+        case 1 ... currentPlayer.team.count:
+            characterIndex = (entry - 1)
+        default:
+            print("This character doesn't exist")
+            return selectCharacter(currentPlayer)
+        }
+        
         return currentPlayer.team[characterIndex]
     }
     
-    private func whatToDo(for currentPlayer: Player, with currentCharacter: Character){
+    //ask what to do
+    private func actions(for currentPlayer: Player, with currentCharacter: Character){
         print("""
 What do you wanna do?
     1 - Attack
@@ -97,7 +115,7 @@ What do you wanna do?
                 heal(in: currentPlayer, with: currentCharacter)
             default:
                 print("Invalid entry")
-                whatToDo(for: currentPlayer, with: currentCharacter)
+                actions(for: currentPlayer, with: currentCharacter)
             }
         }
     }
@@ -109,12 +127,18 @@ What do you wanna do?
         for (index, character) in targetPlayer.team.enumerated(){
             print("\(index + 1) - \(character.name) with \(character.pv) PV")
         }
-        if let entry =  readLine(){
-            if let index = Int(entry){
-                targetPlayer.team[index - 1].pv -= currentCharacter.weapon.attack
-            }
+        guard let entry = Int(readLine()!) else{
+            print("Invalid entry")
+            return attack(from: currentPlayer, with: currentCharacter)
         }
-        
+            
+        switch entry {
+        case 1 ... targetPlayer.team.count:
+            targetPlayer.team[entry - 1].pv -= currentCharacter.weapon.attack
+        default:
+            print("Invalid entry")
+            return attack(from: currentPlayer, with: currentCharacter)
+        }
     }
     
     private func heal(in currentPlayer: Player, with currentCharacter: Character){
@@ -122,36 +146,62 @@ What do you wanna do?
         for (index, character) in currentPlayer.team.enumerated(){
             print("\(index + 1) - \(character.name) with \(character.pv) PV")
         }
-        if let entry = readLine(){
-            if let index = Int(entry){
-                currentPlayer.team[index - 1].pv += currentCharacter.weapon.heal
-            }
+        guard let entry = Int(readLine()!) else{
+            print("Invalid entry")
+            return heal(in: currentPlayer, with: currentCharacter)
+        }
+        switch entry {
+        case 1 ... currentPlayer.team.count:
+            currentPlayer.team[entry - 1].pv += currentCharacter.weapon.heal
+        default:
+            print("Invalid entry")
+            return heal(in: currentPlayer, with: currentCharacter)
         }
     }
     
+    //select the target player
     private func selectTargetPlayer(_ currentPlayer: Player) -> Player{
-        var targetPlayerList = [Player]()
+        var targetList = [Player]()
+        var targetIndex = Int()
         
         for player in players{
             if player.playerNumber != currentPlayer.playerNumber{
-                targetPlayerList.append(player)
+                targetList.append(player)
             }
         }
-        if targetPlayerList.count > 1 {
-            print(" Select the player you wanna target : ")
-            for (index, player) in targetPlayerList.enumerated(){
-                print("\(index + 1) - \(player.nickname)")
-            }
-            if let entry = readLine(){
-                if let index = Int(entry){
-                    return targetPlayerList[index - 1]
-                }
-            }
+        guard targetList.count > 1 else {
+            return targetList[0]
+        }
+        //if more than 2 players, this code is execute
+        for (index, player) in targetList.enumerated(){
+            print("\(index + 1) - \(player.nickname)")
+        }
+        guard let entry = Int(readLine()!) else {
+            print("Invalid entry")
+            return selectTargetPlayer(currentPlayer)
+        }
+        switch entry {
+        case 1 ... targetList.count:
+            targetIndex = (entry - 1)
+        default:
+            print("This player doesn't exist")
+            return selectTargetPlayer(currentPlayer)
         }
         
-        return targetPlayerList[0]
-        
+        return targetList[targetIndex]
     }
     
+    private func checkState(){
+        for player in players{
+            for (index, character) in player.team.enumerated(){
+                if character.pv <= 0{
+                    player.team.remove(at: index)
+                }
+            }
+            if player.team.isEmpty{
+                state = .over
+            }
+        }
+    }
 }
 

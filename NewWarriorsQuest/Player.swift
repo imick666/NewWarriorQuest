@@ -38,7 +38,9 @@ class Player{
             team.append(character)
         }while team.count < 3
     }
-    
+//----------------------------------------
+//MARK: PRIVATE FUNCTION
+//---------------------------------------
     
     private func createCharacter(allPlayers: [Player]) -> Character{
         var character = Character(name: "", race: .Elfs)
@@ -98,11 +100,9 @@ class Player{
                     }
                 }
             }
-            
             //pickup name
             name = entry
         }
-        
         return name
     }
 }
