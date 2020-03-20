@@ -18,6 +18,7 @@ class Game{
     var players = [Player]()
     var nbPlayers = 0
     var state: State = .over
+    var score = Score()
         
     init(){
         //--------------------------------
@@ -39,6 +40,7 @@ class Game{
         for playerNumber in 1 ... nbPlayers{
             let playerX = Player(playerNumber, in: players)
             players.append(playerX)
+            score.players.append(playerX)
         }
         
         showTeams()
@@ -47,7 +49,16 @@ class Game{
         //MARK: FIGHT
         //--------------------------
         state = .ongoing
+        var loop = 0
         repeat{
+            //count rounds
+            //add one round evry time all player have play
+            loop += 1
+            if loop % players.count == 1{
+                score.round += 1
+            }
+            //show round number
+            print("ROUND \(score.round)")
             //switch on each player to each round
             let currentPlayer = players[0]
             //print the current player
@@ -60,13 +71,20 @@ class Game{
             print(currentCharacter.name)
             //ask wich action to do
             actions(for: currentPlayer, with: currentCharacter)
-            //check if characters are dead or if the game is over
+            //check if characters are dead or if the game is over and switch player
             checkState(currentPlayer)
             guard players.count > 1 else{
                 state = .over
                 break
             }
-            
+            //test score-------------------
+            for player in score.players{
+                print(player.nickname)
+                for hero in player.team{
+                    print(hero.name)
+                }
+            }
+            //------------------------------
         }while state == .ongoing
         
     }
@@ -99,19 +117,16 @@ class Game{
         }
         players.append(currentPlayer)
         players.remove(at: 0)
-        for (index, player) in players.enumerated(){
-            print("\(index) - \(player.nickname)")
-        }
     }
         
     private func randomWeaponAppear(for currentPlayer: Player){
         let randomWeapon = RandomWeapon(name: "", attack: 0, heal: 0)
         
         print("""
-A new weapon is appear!!!!
-Do you wanna assign \(randomWeapon.name) to a character?
-Y / N
-""")
+            A new weapon is appear!!!!
+            Do you wanna assign \(randomWeapon.name) to a character?
+            Y / N
+        """)
         if let entry = readLine(){
             switch entry {
             case "y", "Y":
@@ -172,10 +187,10 @@ Y / N
     //ask what to do
     private func actions(for currentPlayer: Player, with currentCharacter: Character){
         print("""
-What do you wanna do?
-    1 - Attack
-    2 - Heal
-""")
+            What do you wanna do?
+                1 - Attack
+                2 - Heal
+        """)
         if let answer = readLine(){
             switch answer {
             case "1":
