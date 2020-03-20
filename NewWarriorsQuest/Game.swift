@@ -42,30 +42,31 @@ class Game{
         }
         
         showTeams()
+        print("\n---FIGHT---\n")
         //--------------------------
         //MARK: FIGHT
         //--------------------------
         state = .ongoing
         repeat{
             //switch on each player to each round
-            for currentPlayer in players{
-                // ternary condition for make apears random weapon with 25% of chance
-                let _ = Int.random(in: 0 ... 100) <= 25 ? randomWeaponAppear(for: currentPlayer) :
-                //print the current player
-                print("Player \(currentPlayer.playerNumber) : \(currentPlayer.nickname) ")
-                //select the current character
-                let currentCharacter = selectCharacter(currentPlayer)
-                //show wich character have been choose
-                print(currentCharacter.name)
-                //ask wich action to do
-                actions(for: currentPlayer, with: currentCharacter)
-                //check if characters are dead or if the game is over
-                checkState()
-                guard players.count > 1 else{
-                    state = .over
-                    break
-                }
+            let currentPlayer = players[0]
+            //print the current player
+            print("Player \(currentPlayer.playerNumber) : \(currentPlayer.nickname) ")
+            // ternary condition for make apears random weapon with 25% of chance
+            let _ = Int.random(in: 0 ... 100) <= 25 ? randomWeaponAppear(for: currentPlayer) : nil
+            //select the current character
+            let currentCharacter = selectCharacter(currentPlayer)
+            //show wich character have been choose
+            print(currentCharacter.name)
+            //ask wich action to do
+            actions(for: currentPlayer, with: currentCharacter)
+            //check if characters are dead or if the game is over
+            checkState(currentPlayer)
+            guard players.count > 1 else{
+                state = .over
+                break
             }
+            
         }while state == .ongoing
         
     }
@@ -85,18 +86,23 @@ class Game{
         }
     }
     
-     private func checkState(){
-            for (index, player) in players.enumerated(){
-                for (index, character) in player.team.enumerated(){
-                    if character.pv <= 0{
-                        player.team.remove(at: index)
-                    }
-                }
-                if player.team.isEmpty{
-                    players.remove(at: index)
+    private func checkState(_ currentPlayer: Player){
+        for (index, player) in players.enumerated(){
+            for (index, character) in player.team.enumerated(){
+                if character.pv <= 0{
+                    player.team.remove(at: index)
                 }
             }
+            if player.team.isEmpty{
+                players.remove(at: index)
+            }
         }
+        players.append(currentPlayer)
+        players.remove(at: 0)
+        for (index, player) in players.enumerated(){
+            print("\(index) - \(player.nickname)")
+        }
+    }
         
     private func randomWeaponAppear(for currentPlayer: Player){
         let randomWeapon = RandomWeapon(name: "", attack: 0, heal: 0)
