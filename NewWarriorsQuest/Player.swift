@@ -42,10 +42,40 @@ class Player {
             team.append(character)
         }while team.count < 3
     }
+//---------------------------------
+// MARK: - FUNCTION
+//---------------------------------
+    //select character to use
+    func selectCharacter() -> Character {
+        var aliveCharacter = [Character]()
+
+        for character in self.team where character.state == .alive {
+            aliveCharacter.append(character)
+        }
+        print("Select your character :")
+        for (index, character) in aliveCharacter.enumerated() {
+            print("""
+                \(index + 1) : \(character.name)
+                PV : \(character.lifePoint) | Attack : \(character.weapon.attack)
+                """)
+        }
+        guard let entry = Int(readLine()!) else {
+            print("Invalid entry, please choose a character")
+            return selectCharacter()
+        }
+        switch entry {
+        case 1 ... aliveCharacter.count:
+            return aliveCharacter[entry - 1]
+        default:
+            print("This character doesn't exist")
+            return selectCharacter()
+        }
+    }
 //----------------------------------------
 // MARK: PRIVATE FUNCTION
-//---------------------------------------
-
+//----------------------------------------
+// MARK: Create Players Function
+//----------------------------------------
     private func createCharacter(allPlayers: [Player]) -> Character {
         var character = Character(name: "", race: .elfs)
 
@@ -107,32 +137,5 @@ class Player {
             name = entry
         }
         return name
-    }
-
-    //select character to use
-    func selectCharacter() -> Character {
-        var aliveCharacter = [Character]()
-
-        for character in self.team where character.state == .alive {
-            aliveCharacter.append(character)
-        }
-        print("Select your character :")
-        for (index, character) in aliveCharacter.enumerated() {
-            print("""
-                \(index + 1) : \(character.name)
-                PV : \(character.lifePoint) | Attack : \(character.weapon.attack)
-                """)
-        }
-        guard let entry = Int(readLine()!) else {
-            print("Invalid entry, please choose a character")
-            return selectCharacter()
-        }
-        switch entry {
-        case 1 ... aliveCharacter.count:
-            return aliveCharacter[entry - 1]
-        default:
-            print("This character doesn't exist")
-            return selectCharacter()
-        }
     }
 }

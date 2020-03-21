@@ -65,14 +65,15 @@ class Game {
                 //ask wich action to do
                 currentCharacter.actions(for: currentPlayer, to: players)
                 //check if characters are dead or if the game is over and switch player
-                checkState(currentPlayer)
-                guard players.count > 1 else {
-                    state = .over
+                state = checkState()
+                print(state)
+                if state == .over {
                     break
                 }
                 showTeams()
             }
         }while state == .ongoing
+        
     }
 
     //-------------------------------------
@@ -88,20 +89,32 @@ class Game {
             }
         }
     }
-
-    private func checkState(_ currentPlayer: Player) {
-        for player in players {
+    //Can be optimize!!
+    private func checkState() -> State {
+        var nbPlayerAlive = 0
+        //check if character is dead
+        for player in players where player.state == .alive {
             for character in player.team where character.lifePoint <= 0 {
                 character.state = .dead
             }
-            var checkIfPlayerDead = 0
-            for character in player.team where character.state == .alive {
-                checkIfPlayerDead += 1
+            //check if player is dead
+            var checkIfPlayerDead: Int {
+                for character in player.team where character.state == .alive {
+                    return +1
+                }
+                return +0
             }
             if checkIfPlayerDead == 0 {
                 player.state = .dead
             }
         }
+        for player in players where player.state == .alive {
+            nbPlayerAlive += 1
+        }
+        guard nbPlayerAlive > 1 else {
+            return .over
+        }
+        return .ongoing
     }
      //create a random weapon
     private func randomWeaponAppear(for currentPlayer: Player) {
