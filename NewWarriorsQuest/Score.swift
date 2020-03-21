@@ -7,8 +7,7 @@
 //
 
 import Foundation
-struct Score{
+struct Score {
     var players = [Player]()
     var round = 0
-
 }

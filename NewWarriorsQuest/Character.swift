@@ -7,30 +7,29 @@
 //
 
 import Foundation
-enum Race{
-    case Elfs, Dwarfs, Orcs
+enum Race {
+    case elfs, dwarfs, orcs
 }
 
-class Character{
+class Character {
     var name: String
     var race: Race
-    var pv = 0
+    var lifePoint = 0
     var weapon = Weapon(name: "", attack: 0, heal: 0)
-    
-    init(name: String, race: Race){
+
+    init(name: String, race: Race) {
         self.name = name
         self.race = race
         switch race {
-        case .Elfs:
-            self.pv = 300
+        case .elfs:
+            self.lifePoint = 300
             self.weapon = .init(name: "Bow", attack: 90, heal: 50)
-        case .Dwarfs:
-            self.pv = 500
+        case .dwarfs:
+            self.lifePoint = 500
             self.weapon = .init(name: "Axe", attack: 150, heal: 0)
-        case .Orcs:
-            self.pv = 1000
+        case .orcs:
+            self.lifePoint = 1000
             self.weapon = .init(name: "Sword", attack: 1000, heal: 0)
         }
     }
-    
 }
