@@ -108,4 +108,31 @@ class Player {
         }
         return name
     }
+
+    //select character to use
+    func selectCharacter() -> Character {
+        var aliveCharacter = [Character]()
+
+        for character in self.team where character.state == .alive {
+            aliveCharacter.append(character)
+        }
+        print("Select your character :")
+        for (index, character) in aliveCharacter.enumerated() {
+            print("""
+                \(index + 1) : \(character.name)
+                PV : \(character.lifePoint) | Attack : \(character.weapon.attack)
+                """)
+        }
+        guard let entry = Int(readLine()!) else {
+            print("Invalid entry, please choose a character")
+            return selectCharacter()
+        }
+        switch entry {
+        case 1 ... aliveCharacter.count:
+            return aliveCharacter[entry - 1]
+        default:
+            print("This character doesn't exist")
+            return selectCharacter()
+        }
+    }
 }
