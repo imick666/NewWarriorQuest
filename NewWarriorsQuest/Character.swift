@@ -10,12 +10,16 @@ import Foundation
 enum Race {
     case elfs, dwarfs, orcs
 }
+enum CharacterState {
+    case alive, dead
+}
 
 class Character {
     var name: String
     var race: Race
     var lifePoint = 0
     var weapon = Weapon(name: "", attack: 0, heal: 0)
+    var state: CharacterState = .alive
 
     init(name: String, race: Race) {
         self.name = name

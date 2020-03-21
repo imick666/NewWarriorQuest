@@ -7,11 +7,14 @@
 //
 
 import Foundation
-
+enum PlayerState {
+    case alive, dead
+}
 class Player {
     var nickname = ""
     var playerNumber = 0
     var team = [Character]()
+    var state: PlayerState = .alive
 
     init(_ playerNumber: Int, in allPlayers: [Player]) {
         createPlayer(playerNumber, allPlayers: allPlayers)
