@@ -81,7 +81,6 @@ class Character {
             }
             return players.enumerateAliveTargetPlayers(currentPlayer)[0]
         }
-        let targetAliveCharacters = targetPlayer.enumerateAliveCharacters()
 
         print("select character you wanna attack : ")
         targetPlayer.showAliveCharacters()
@@ -92,8 +91,8 @@ class Character {
         }
 
         switch entry {
-        case 1 ... targetAliveCharacters.count:
-            targetAliveCharacters[entry - 1].lifePoint -= currentCharacter.weapon.attack
+        case 1 ... targetPlayer.enumerateAliveCharacters().count:
+            targetPlayer.enumerateAliveCharacters()[entry - 1].lifePoint -= currentCharacter.weapon.attack
         default:
             print("Invalid entry")
             return attack(from: currentPlayer, with: currentCharacter, to: players)
@@ -118,7 +117,7 @@ class Character {
 
     //select the target player if more than 2 players
     private func selectTargetPlayer(_ currentPlayer: Player, _ players: Game) -> Player {
-        players.shwoAliveTargetPlayers(currentPlayer)
+        players.showAliveTargetPlayers(currentPlayer)
 
         guard let entry = Int(readLine()!) else {
             print("Invalid entry")

@@ -80,16 +80,16 @@ class Game {
     // MARK: - FUNCTION
     //-------------------------------------
     func enumerateAliveTargetPlayers(_ currentPlayer: Player) -> [Player] {
-        var alivePlayers = [Player]()
+        var aliveTargetPlayers = [Player]()
 
         for player in players where (player.state == .alive) && (player.playerNumber != currentPlayer.playerNumber) {
-            alivePlayers.append(player)
+            aliveTargetPlayers.append(player)
         }
 
-        return alivePlayers
+        return aliveTargetPlayers
     }
 
-    func shwoAliveTargetPlayers(_ currentPlayer: Player) {
+    func showAliveTargetPlayers(_ currentPlayer: Player) {
         for (index, player) in enumerateAliveTargetPlayers(currentPlayer).enumerated() {
             print("\(index + 1) - \(player.nickname)")
         }
@@ -175,7 +175,7 @@ class Game {
         case 1 ... currentAliveCharacter.count:
             currentAliveCharacter[entry - 1].weapon = randomWeapon
             print("Character \(currentAliveCharacter[entry - 1].name) have now \(randomWeapon.attack)"
-                + "of attack and \(randomWeapon.heal) of heal capacity!")
+                + " of attack and \(randomWeapon.heal) of heal capacity!")
         default:
             print("This character doesn't exist.")
             return assignWeapon(randomWeapon, to: currentPlayer)
