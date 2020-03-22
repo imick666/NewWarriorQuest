@@ -63,7 +63,7 @@ class Game {
                 //show wich character have been choose
                 print("You choosed \(currentCharacter.name)")
                 //ask wich action to do
-                currentCharacter.actions(for: currentPlayer, to: players)
+                currentCharacter.actions(for: currentPlayer, to: self)
                 //check if player and character are dead or alive
                 checkDeadOrAlive()
                 //check if game is over
@@ -76,7 +76,24 @@ class Game {
             }
         }while state == .ongoing
     }
+    //-------------------------------------
+    // MARK: - FUNCTION
+    //-------------------------------------
+    func enumerateAliveTargetPlayers(_ currentPlayer: Player) -> [Player] {
+        var alivePlayers = [Player]()
 
+        for player in players where (player.state == .alive) && (player.playerNumber != currentPlayer.playerNumber) {
+            alivePlayers.append(player)
+        }
+
+        return alivePlayers
+    }
+
+    func shwoAliveTargetPlayers(_ currentPlayer: Player) {
+        for (index, player) in enumerateAliveTargetPlayers(currentPlayer).enumerated() {
+            print("\(index + 1) - \(player.nickname)")
+        }
+    }
     //-------------------------------------
     // MARK: - PRIVATE FUNCTION
     //-------------------------------------
@@ -91,7 +108,7 @@ class Game {
         }
     }
 
-    //Can be optimize!!
+    //check if players and characters are dead or alive
     private func checkDeadOrAlive() {
         //check if character is dead
         for player in players where player.state == .alive {
@@ -102,7 +119,7 @@ class Game {
             player.checkIfDead()
         }
     }
-
+    //check if the game is over
     private func checkState() -> State {
         var playersAlive = 0
         for player in players where player.state == .alive {

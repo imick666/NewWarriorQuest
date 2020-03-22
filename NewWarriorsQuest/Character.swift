@@ -41,7 +41,7 @@ class Character {
 // MARK: - FUNCTION
 //---------------------------------
     //ask what to do
-    func actions(for currentPlayer: Player, to allPlayers: [Player]) {
+    func actions(for currentPlayer: Player, to allPlayers: Game) {
         print("""
             What do you wanna do?
                 1 - Attack
@@ -74,84 +74,62 @@ class Character {
 //---------------------------------
 // MARK: - Private FUNCTION
 //---------------------------------
-    private func attack(from currentPlayer: Player, with currentCharacter: Character, to allPlayers: [Player]) {
-        let targetPlayer = selectTargetPlayer(currentPlayer, allPlayers)
-        var targetAliveCharacter = [Character]()
+    private func attack(from currentPlayer: Player, with currentCharacter: Character, to players: Game) {
+        var targetPlayer: Player {
+            if players.enumerateAliveTargetPlayers(currentPlayer).count > 1 {
+                return selectTargetPlayer(currentPlayer, players)
+            }
+            return players.enumerateAliveTargetPlayers(currentPlayer)[0]
+        }
+        let targetAliveCharacters = targetPlayer.enumerateAliveCharacters()
 
-        for character in targetPlayer.team where character.state == .alive {
-            targetAliveCharacter.append(character)
-        }
         print("select character you wanna attack : ")
-        for (index, character) in targetAliveCharacter.enumerated() {
-            print("\(index + 1) - \(character.name) with \(character.lifePoint) PV")
-        }
+        targetPlayer.showAliveCharacters()
+
         guard let entry = Int(readLine()!) else {
             print("Invalid entry")
-            return attack(from: currentPlayer, with: currentCharacter, to: allPlayers)
+            return attack(from: currentPlayer, with: currentCharacter, to: players)
         }
 
         switch entry {
-        case 1 ... targetPlayer.team.count:
-            targetAliveCharacter[entry - 1].lifePoint -= currentCharacter.weapon.attack
-            for character in  targetAliveCharacter where character.lifePoint < 0 {
-                character.lifePoint = 0
-            }
+        case 1 ... targetAliveCharacters.count:
+            targetAliveCharacters[entry - 1].lifePoint -= currentCharacter.weapon.attack
         default:
             print("Invalid entry")
-            return attack(from: currentPlayer, with: currentCharacter, to: allPlayers)
+            return attack(from: currentPlayer, with: currentCharacter, to: players)
         }
     }
 
     private func heal(in currentPlayer: Player, with currentCharacter: Character) {
-        var currentAliveCharacter = [Character]()
-
-        for character in currentPlayer.team where character.state == .alive {
-            currentAliveCharacter.append(character)
-        }
         print("who do you wanna heal?")
-        for (index, character) in currentAliveCharacter.enumerated() {
-            print("\(index + 1) - \(character.name) with \(character.lifePoint) PV")
-        }
+        currentPlayer.showAliveCharacters()
         guard let entry = Int(readLine()!) else {
             print("Invalid entry")
             return heal(in: currentPlayer, with: currentCharacter)
         }
         switch entry {
-        case 1 ... currentPlayer.team.count:
-            currentAliveCharacter[entry - 1].lifePoint += currentCharacter.weapon.heal
+        case 1 ... currentPlayer.enumerateAliveCharacters().count:
+            currentPlayer.enumerateAliveCharacters()[entry - 1].lifePoint += currentCharacter.weapon.heal
         default:
             print("Invalid entry")
             return heal(in: currentPlayer, with: currentCharacter)
         }
     }
 
-    //select the target player
-    private func selectTargetPlayer(_ currentPlayer: Player, _ players: [Player]) -> Player {
-        var targetList = [Player]()
-        var targetIndex = Int()
+    //select the target player if more than 2 players
+    private func selectTargetPlayer(_ currentPlayer: Player, _ players: Game) -> Player {
+        players.shwoAliveTargetPlayers(currentPlayer)
 
-        for player in players where (player.playerNumber != currentPlayer.playerNumber) && (player.state == .alive) {
-            targetList.append(player)
-        }
-        guard targetList.count > 1 else {
-            return targetList[0]
-        }
-        //if more than 2 players, this code is execute
-        for (index, player) in targetList.enumerated() {
-            print("\(index + 1) - \(player.nickname)")
-        }
         guard let entry = Int(readLine()!) else {
             print("Invalid entry")
             return selectTargetPlayer(currentPlayer, players)
         }
         switch entry {
-        case 1 ... targetList.count:
-            targetIndex = (entry - 1)
+        case 1 ... players.enumerateAliveTargetPlayers(currentPlayer).count:
+            return players.enumerateAliveTargetPlayers(currentPlayer)[entry - 1]
         default:
             print("This player doesn't exist")
             return selectTargetPlayer(currentPlayer, players)
         }
-
-        return targetList[targetIndex]
     }
 }

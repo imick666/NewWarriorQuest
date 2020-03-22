@@ -26,21 +26,21 @@ class Score {
             """)
         for character in winner.team {
             print("""
-                \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
-                Weapon : \(character.weapon.name) with \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
+            \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
+            Weapon : \(character.weapon.name) : \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
 
-                """)
-        }
+            """)
+            }
         print("//////////////////////////")
 
         for player in players where player.playerNumber != winner.playerNumber {
             print("Player \(player.playerNumber) - \(player.nickname)")
             for character in player.team {
                 print("""
-                    \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
-                    Weapon : \(character.weapon.name) with \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
+                \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
+                Weapon : \(character.weapon.name) : \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
 
-                    """)
+                """)
             }
             print("//////////////////////////")
         }
