@@ -26,7 +26,7 @@ class Score {
             """)
         for character in winner.team {
             print("""
-                \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV |
+                \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
                 Weapon : \(character.weapon.name) with \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
 
                 """)
@@ -37,7 +37,7 @@ class Score {
             print("Player \(player.playerNumber) - \(player.nickname)")
             for character in player.team {
                 print("""
-                    \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV |
+                    \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
                     Weapon : \(character.weapon.name) with \(character.weapon.attack) attack and \(character.weapon.heal) heal capacity
 
                     """)
@@ -51,7 +51,6 @@ class Score {
     //----------------------------
     //determine the winner
     private func determinateWinner() -> Player {
-
         for player in players where player.state == .alive {
             return player
         }

@@ -37,6 +37,9 @@ class Character {
         }
     }
 
+//---------------------------------
+// MARK: - FUNCTION
+//---------------------------------
     //ask what to do
     func actions(for currentPlayer: Player, to allPlayers: [Player]) {
         print("""
@@ -62,6 +65,15 @@ class Character {
         }
     }
 
+    func checkIfDead() {
+        if self.lifePoint <= 0 {
+            self.lifePoint = 0
+            self.state = .dead
+        }
+    }
+//---------------------------------
+// MARK: - Private FUNCTION
+//---------------------------------
     private func attack(from currentPlayer: Player, with currentCharacter: Character, to allPlayers: [Player]) {
         let targetPlayer = selectTargetPlayer(currentPlayer, allPlayers)
         var targetAliveCharacter = [Character]()

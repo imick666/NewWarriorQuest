@@ -71,6 +71,17 @@ class Player {
             return selectCharacter()
         }
     }
+
+    func checkIfDead() {
+        var aliveCharacter = 0
+
+        for character in self.team where character.state == .alive {
+            aliveCharacter += 1
+        }
+        if aliveCharacter == 0 {
+            self.state = .dead
+        }
+    }
 //----------------------------------------
 // MARK: PRIVATE FUNCTION
 //----------------------------------------
