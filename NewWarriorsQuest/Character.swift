@@ -49,7 +49,12 @@ class Character {
             case "1":
                 attack(from: currentPlayer, with: self, to: allPlayers)
             case "2":
-                heal(in: currentPlayer, with: self)
+                if self.race == .elfs {
+                    heal(in: currentPlayer, with: self)
+                } else {
+                    print("Sorry, only Elfs can heal...")
+                    actions(for: currentPlayer, to: allPlayers)
+                }
             default:
                 print("Invalid entry")
                 actions(for: currentPlayer, to: allPlayers)
