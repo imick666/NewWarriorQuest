@@ -46,7 +46,7 @@ class Character {
             What do you wanna do?
                 1 - Attack
                 2 - Heal
-        """)
+            """)
         if let answer = readLine() {
             switch answer {
             case "1":

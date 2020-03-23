@@ -134,7 +134,7 @@ class Game {
 
      //create a random weapon
     private func randomWeaponAppear(for currentPlayer: Player) {
-        let randomWeapon = RandomWeapon(name: "", attack: 0, heal: 0)
+        let randomWeapon = Weapon.randomWeapon()
 
         print("""
             A new weapon has appear!!!!

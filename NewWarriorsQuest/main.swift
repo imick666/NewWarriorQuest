@@ -11,7 +11,7 @@ import Foundation
 print("""
     Welcom in NewWarriorQuest
 
-    This game is a RPGLike for 2 players
+    This game is a RPGLike for 2 or more players
     Each player have to choose 3 characters
 
     """)
