@@ -21,7 +21,7 @@ class Score {
     func showScoreTable() {
         print("""
             //////////////////////////
-            THE WINNER IS : \(winner.nickname)!!!!!
+            THE WINNER IS : \(winner.nickname) isDead:\(winner.isDead)!!!!!
             //////////////////////////
             """)
         for character in winner.team {
@@ -34,7 +34,7 @@ class Score {
         print("//////////////////////////")
 
         for player in players where player.playerNumber != winner.playerNumber {
-            print("Player \(player.playerNumber) - \(player.nickname)")
+            print("Player \(player.playerNumber) - \(player.nickname) isDead : \(player.isDead)")
             for character in player.team {
                 print("""
                 \(character.name) : wich is a(n) \(character.race) with \(character.lifePoint) PV
@@ -51,7 +51,7 @@ class Score {
     //----------------------------
     //determine the winner
     private func determinateWinner() -> Player {
-        for player in players where player.state == .alive {
+        for player in players where !player.isDead {
             return player
         }
         return determinateWinner()

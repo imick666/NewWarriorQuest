@@ -7,40 +7,27 @@
 //
 
 import Foundation
-enum PlayerState {
-    case alive, dead
-}
+
 class Player {
     var nickname = ""
+    static var nicknameList = [String]()
     var playerNumber = 0
     var team = [Character]()
-    var state: PlayerState = .alive
-
-    init(_ playerNumber: Int, in allPlayers: [Player]) {
-        createPlayer(playerNumber, allPlayers: allPlayers)
+    var isDead: Bool {
+        var count: Int {
+            for character in team where !character.isDead {
+                return +1
+            }
+            return +0
+        }
+        guard count > 0 else {
+            return true
+        }
+        return false
     }
 
-    private func createPlayer(_ playerNumber: Int, allPlayers: [Player]) {
-        print("""
-        Player \(playerNumber)
-        Enter your Nickname :
-        """)
-        if let entry = readLine() {
-            //check if player name already exist
-            for player in allPlayers {
-                guard entry != player.nickname else {
-                    return createPlayer(playerNumber, allPlayers: allPlayers)
-                }
-            }
-            nickname = entry
-            self.playerNumber = playerNumber
-        }
-        //create team
-        //repeat until 3 characters in the team
-        repeat {
-            let character = createCharacter(allPlayers: allPlayers)
-            team.append(character)
-        }while team.count < 3
+    init(_ playerNumber: Int) {
+        createPlayer(playerNumber)
     }
 //---------------------------------
 // MARK: - FUNCTION
@@ -49,23 +36,26 @@ class Player {
     func selectCharacter() -> Character {
         print("Select your character :")
         showAliveCharacters()
-        guard let entry = Int(readLine()!) else {
-            print("Invalid entry, please choose a character")
-            return selectCharacter()
+        if let entry = readLine() {
+            guard let index = Int(entry) else {
+                print("Invalid entry, please choose a character")
+                return selectCharacter()
+            }
+            switch index {
+            case 1 ... enumerateAliveCharacters().count:
+                return enumerateAliveCharacters()[index - 1]
+            default:
+                print("This character doesn't exist")
+                return selectCharacter()
+            }
         }
-        switch entry {
-        case 1 ... enumerateAliveCharacters().count:
-            return enumerateAliveCharacters()[entry - 1]
-        default:
-            print("This character doesn't exist")
-            return selectCharacter()
-        }
+        return selectCharacter()
     }
 
     func enumerateAliveCharacters() -> [Character] {
         var aliveCharacters = [Character]()
 
-        for character in self.team where character.state == .alive {
+        for character in self.team where !character.isDead {
             aliveCharacters.append(character)
         }
         return aliveCharacters
@@ -80,14 +70,28 @@ class Player {
         }
     }
 
-    func checkIfDead() {
-        var aliveCharacter = 0
-
-        for character in self.team where character.state == .alive {
-            aliveCharacter += 1
-        }
-        if aliveCharacter == 0 {
-            self.state = .dead
+    //ask what to do
+    func actions(from currentPlayer: Player, with currentCharacter: Character, to currentTarget: Player) {
+        print("""
+            What do you wanna do?
+                1 - Attack
+                2 - Heal
+            """)
+        if let answer = readLine() {
+            switch answer {
+            case "1":
+                currentCharacter.attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
+            case "2":
+                if currentCharacter.race == .elfs {
+                    currentCharacter.heal(with: currentCharacter, to: currentPlayer)
+                } else {
+                    print("Sorry, only Elfs can heal...")
+                    actions(from: currentPlayer, with: currentCharacter, to: currentTarget)
+                }
+            default:
+                print("Invalid entry")
+                actions(from: currentPlayer, with: currentCharacter, to: currentTarget)
+            }
         }
     }
 //----------------------------------------
@@ -95,7 +99,31 @@ class Player {
 //----------------------------------------
 // MARK: Create Players Function
 //----------------------------------------
-    private func createCharacter(allPlayers: [Player]) -> Character {
+    private func createPlayer(_ playerNumber: Int) {
+        print("""
+        Player \(playerNumber)
+        Enter your Nickname :
+        """)
+        if let entry = readLine() {
+            //check if player name already exist
+            for name in Player.nicknameList {
+                guard entry != name else {
+                    print("nickname already exist")
+                    return createPlayer(playerNumber)
+                }
+            }
+            Player.nicknameList.append(entry)
+            nickname = entry
+            self.playerNumber = playerNumber
+        }
+        //create team
+        //repeat until 3 characters in the team
+        repeat {
+            team.append(createCharacter())
+        }while team.count < 3
+    }
+
+    private func createCharacter() -> Character {
         var character = Character(name: "", race: .elfs)
 
         print("""
@@ -117,44 +145,34 @@ class Player {
                 character = .init(name: "", race: .orcs)
             default:
                 print("I don't understand")
-                return createCharacter(allPlayers: allPlayers)
+                return createCharacter()
             }
         }
-        character.name = namingChar(allPlayers: allPlayers)
+        character.name = namingChar()
 
         return character
 
     }
 
-    private func namingChar(allPlayers: [Player]) -> String {
-        var name = ""
-
+    private func namingChar() -> String {
         print("Give him a name : ")
         if let entry = readLine() {
             //check if name less than 3 characters
             guard entry.count > 3 else {
                 print("Name is to short")
-                return namingChar(allPlayers: allPlayers)
+                return namingChar()
             }
             //check if name alwready used in current team
-            for character in team {
-                guard entry != character.name else {
+            for name in Character.namesList {
+                guard entry != name else {
                     print("name already used")
-                    return namingChar(allPlayers: allPlayers)
+                    return namingChar()
                 }
             }
-            //check if name already used in all team
-            for player in allPlayers {
-                for character in player.team {
-                    guard entry != character.name else {
-                        print("name already used")
-                        return namingChar(allPlayers: allPlayers)
-                    }
-                }
-            }
+            Character.namesList.append(entry)
             //pickup name
-            name = entry
+            return entry
         }
-        return name
+        return namingChar()
     }
 }
