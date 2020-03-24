@@ -68,7 +68,7 @@ class Character {
             }
         }
     }
-  
+
     func heal(with currentCharacter: Character, to currentPlayer: Player) {
         print("who do you wanna heal?")
         currentPlayer.showAliveCharacters()

@@ -51,7 +51,7 @@ class Player {
         }
         return selectCharacter()
     }
-  
+
     func enumerateAliveCharacters() -> [Character] {
         var aliveCharacters = [Character]()
 

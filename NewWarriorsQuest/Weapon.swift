@@ -26,4 +26,3 @@ class Weapon {
         return Weapon(name: randomName.randomElement()!, attack: randomAttack, heal: randomHeal)
     }
 }
-  
