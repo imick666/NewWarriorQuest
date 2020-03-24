@@ -122,7 +122,7 @@ class Game {
             print("\(index + 1) - \(player.nickname) -- Attack")
         }
     }
-
+  
     func enumerateAllAlivePlayers(_ currentPlayer: Player) -> [Player] {
         var aliveTargetPlayers = [Player]()
 
