@@ -72,26 +72,11 @@ class Player {
 
     //ask what to do
     func actions(from currentPlayer: Player, with currentCharacter: Character, to currentTarget: Player) {
-        print("""
-            What do you wanna do?
-                1 - Attack
-                2 - Heal
-            """)
-        if let answer = readLine() {
-            switch answer {
-            case "1":
-                currentCharacter.attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
-            case "2":
-                if currentCharacter.race == .elfs {
-                    currentCharacter.heal(with: currentCharacter, to: currentPlayer)
-                } else {
-                    print("Sorry, only Elfs can heal...")
-                    actions(from: currentPlayer, with: currentCharacter, to: currentTarget)
-                }
-            default:
-                print("Invalid entry")
-                actions(from: currentPlayer, with: currentCharacter, to: currentTarget)
-            }
+        switch currentTarget.playerNumber == currentPlayer.playerNumber {
+        case true:
+            currentCharacter.heal(with: currentCharacter, to: currentTarget)
+        case false:
+            currentCharacter.attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
         }
     }
 //----------------------------------------

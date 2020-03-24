@@ -49,40 +49,68 @@ class Game {
         // MARK: FIGHT
         //--------------------------
         state = .ongoing
+        //0 - switch on each alive player
+        //0bis - A random weapon can appear randomly at the begin of the round
+        //1 - Select character to use
+        //2 - Select Player to target
+            //------------------------------------------------------------
+            //3a - If target is current Player, action is heal only
+            //4a - Select chracter to heal
+            //5a - heal selected character
+            //------------------------------------------------------------
+            //3b - If target is not current player, action is attack only
+            //4b - Select character to attack
+            //5b - Attack selected character
+            //------------------------------------------------------------
+        //6 - check if the game is over
+            //------------------------------------------------------------
+            //7a - If more than 1 player alive, game continue
+            //------------------------------------------------------------
+            //7b - If 1 player alive, game is over
+            //8b - Show score table
+            //------------------------------------------------------------
+        //9 - Repeate loop 'till the game switch to over
         repeat {
             //count rounds
             score.round += 1
             //show round number
             print("ROUND \(score.round)")
-            //switch on each player to each round
+            //0 - switch on each alive player
             for currentPlayer in players where !currentPlayer.isDead {
                 //print the current player
                 print("Player \(currentPlayer.playerNumber) : \(currentPlayer.nickname) ")
+                //0bis - A random weapon can appear randomly at the begin of the round
                 // ternary condition for make apears random weapon with 25% of chance
                 _ = Int.random(in: 0 ... 100) <= 25 ? randomWeaponAppear(for: currentPlayer) : nil
-                //select the current character
+                //1 - Select character to use
                 let currentCharacter = currentPlayer.selectCharacter()
                 //show wich character have been choose
                 print("You choosed \(currentCharacter.name)")
-                //ask wich action to do
-                currentPlayer.actions(from: currentPlayer, with: currentCharacter, to: selectTargetPlayer(currentPlayer))
-                //check if game is over
+                //2 - Select Player to target
+                let targetPlayer = selectTargetPlayer(from: currentPlayer)
+                //3 - make action
+                currentPlayer.actions(from: currentPlayer, with: currentCharacter, to: targetPlayer)
+                //6 - check if the game is over
                 state = checkState()
                 if state == .over {
+                    //7b - If 1 player alive, game is over
+                    //8b - Show score table
                     score.showScoreTable()
                     break
                 }
+                //7a - If more than 1 player alive, game continue
                 showTeams()
             }
+        //9 - Repeate loop 'till the game switch to over
         }while state == .ongoing
     }
     //-------------------------------------
     // MARK: - FUNCTION
     //-------------------------------------
-    func enumerateAliveTargetPlayers(_ currentPlayer: Player) -> [Player] {
+    func enumerateAliveTargetPlayers() -> [Player] {
         var aliveTargetPlayers = [Player]()
 
-        for player in players where (!player.isDead) && (player.playerNumber != currentPlayer.playerNumber) {
+        for player in players where (!player.isDead) {
             aliveTargetPlayers.append(player)
         }
 
@@ -90,8 +118,12 @@ class Game {
     }
 
     func showAliveTargetPlayers(_ currentPlayer: Player) {
-        for (index, player) in enumerateAliveTargetPlayers(currentPlayer).enumerated() {
-            print("\(index + 1) - \(player.nickname)")
+        for (index, player) in enumerateAliveTargetPlayers().enumerated() {
+            if player.playerNumber == currentPlayer.playerNumber {
+                print("\(index + 1) - \(player.nickname) -- Heal")
+            } else {
+                print("\(index + 1) - \(player.nickname) -- Attack")
+            }
         }
     }
     //-------------------------------------
@@ -109,27 +141,23 @@ class Game {
     }
 
     //select the target player if more than 2 players
-    private func selectTargetPlayer(_ currentPlayer: Player) -> Player {
-        guard enumerateAliveTargetPlayers(currentPlayer).count > 1 else {
-            return enumerateAliveTargetPlayers(currentPlayer)[0]
-        }
-
+    private func selectTargetPlayer(from currentPlayer: Player) -> Player {
         print("Select player you wanna target : ")
         showAliveTargetPlayers(currentPlayer)
         if let entry = readLine() {
             guard let index = Int(entry) else {
                 print("Invalid entry")
-                return selectTargetPlayer(currentPlayer)
+                return selectTargetPlayer(from: currentPlayer)
             }
             switch index {
-            case 1 ... enumerateAliveTargetPlayers(currentPlayer).count:
-                return enumerateAliveTargetPlayers(currentPlayer)[index - 1]
+            case 1 ... enumerateAliveTargetPlayers().count:
+                return enumerateAliveTargetPlayers()[index - 1]
             default:
                 print("This player doesn't exist")
-                return selectTargetPlayer(currentPlayer)
+                return selectTargetPlayer(from: currentPlayer)
             }
         }
-        return selectTargetPlayer(currentPlayer)
+        return selectTargetPlayer(from: currentPlayer)
     }
 
     //check if the game is over
