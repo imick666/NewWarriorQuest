@@ -89,21 +89,4 @@ class Character {
 //---------------------------------
 // MARK: - Private FUNCTION
 //---------------------------------
-
-//    //select the target player if more than 2 players
-//    private func selectTargetPlayer(_ currentPlayer: Player, _ players: Game) -> Player {
-//        players.showAliveTargetPlayers(currentPlayer)
-//
-//        guard let entry = Int(readLine()!) else {
-//            print("Invalid entry")
-//            return selectTargetPlayer(currentPlayer, players)
-//        }
-//        switch entry {
-//        case 1 ... players.enumerateAliveTargetPlayers(currentPlayer).count:
-//            return players.enumerateAliveTargetPlayers(currentPlayer)[entry - 1]
-//        default:
-//            print("This player doesn't exist")
-//            return selectTargetPlayer(currentPlayer, players)
-//        }
-//    }
 }

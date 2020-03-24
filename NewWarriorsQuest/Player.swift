@@ -97,6 +97,12 @@ class Player {
                     return createPlayer(playerNumber)
                 }
             }
+            for name in Character.namesList {
+                guard entry != name else {
+                    print("nickname already exist")
+                    return createPlayer(playerNumber)
+                }
+            }
             Player.nicknameList.append(entry)
             nickname = entry
             self.playerNumber = playerNumber
@@ -151,6 +157,12 @@ class Player {
             for name in Character.namesList {
                 guard entry != name else {
                     print("name already used")
+                    return namingChar()
+                }
+            }
+            for name in Player.nicknameList {
+                guard entry != name else {
+                    print("name already used for a player")
                     return namingChar()
                 }
             }

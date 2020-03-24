@@ -87,7 +87,7 @@ class Game {
                 //show wich character have been choose
                 print("You choosed \(currentCharacter.name)")
                 //2 - Select Player to target
-                let targetPlayer = selectTargetPlayer(from: currentPlayer)
+                let targetPlayer = selectTargetPlayer(from: currentPlayer, with: currentCharacter)
                 //3 - make action
                 currentPlayer.actions(from: currentPlayer, with: currentCharacter, to: targetPlayer)
                 //6 - check if the game is over
@@ -107,7 +107,23 @@ class Game {
     //-------------------------------------
     // MARK: - FUNCTION
     //-------------------------------------
-    func enumerateAliveTargetPlayers() -> [Player] {
+    func enumerateAliveTargetPlayers(_ currentPlayer: Player) -> [Player] {
+        var aliveTargetPlayers = [Player]()
+
+        for player in players where (!player.isDead) && (player.playerNumber != currentPlayer.playerNumber) {
+            aliveTargetPlayers.append(player)
+        }
+
+        return aliveTargetPlayers
+    }
+
+    func showAliveTargetPlayers(_ currentPlayer: Player) {
+        for (index, player) in enumerateAliveTargetPlayers(currentPlayer).enumerated() where player.playerNumber != currentPlayer.playerNumber {
+            print("\(index + 1) - \(player.nickname) -- Attack")
+        }
+    }
+
+    func enumerateAllAlivePlayers(_ currentPlayer: Player) -> [Player] {
         var aliveTargetPlayers = [Player]()
 
         for player in players where (!player.isDead) {
@@ -117,8 +133,8 @@ class Game {
         return aliveTargetPlayers
     }
 
-    func showAliveTargetPlayers(_ currentPlayer: Player) {
-        for (index, player) in enumerateAliveTargetPlayers().enumerated() {
+    func showAllAlivePlayers(_ currentPlayer: Player) {
+        for (index, player) in enumerateAllAlivePlayers(currentPlayer).enumerated() {
             if player.playerNumber == currentPlayer.playerNumber {
                 print("\(index + 1) - \(player.nickname) -- Heal")
             } else {
@@ -141,23 +157,44 @@ class Game {
     }
 
     //select the target player if more than 2 players
-    private func selectTargetPlayer(from currentPlayer: Player) -> Player {
-        print("Select player you wanna target : ")
-        showAliveTargetPlayers(currentPlayer)
-        if let entry = readLine() {
-            guard let index = Int(entry) else {
-                print("Invalid entry")
-                return selectTargetPlayer(from: currentPlayer)
+    private func selectTargetPlayer(from currentPlayer: Player, with currentCharacter: Character) -> Player {
+        if currentCharacter.race == .elfs {
+            print("Select player you wanna target : ")
+            showAllAlivePlayers(currentPlayer)
+            if let entry = readLine() {
+                guard let index = Int(entry) else {
+                    print("Invalid entry")
+                    return selectTargetPlayer(from: currentPlayer, with: currentCharacter)
+                }
+                switch index {
+                case 1 ... enumerateAllAlivePlayers(currentPlayer).count:
+                    return enumerateAllAlivePlayers(currentPlayer)[index - 1]
+                default:
+                    print("This player doesn't exist")
+                    return selectTargetPlayer(from: currentPlayer, with: currentCharacter)
+                }
             }
-            switch index {
-            case 1 ... enumerateAliveTargetPlayers().count:
-                return enumerateAliveTargetPlayers()[index - 1]
-            default:
-                print("This player doesn't exist")
-                return selectTargetPlayer(from: currentPlayer)
+        } else {
+            guard enumerateAliveTargetPlayers(currentPlayer).count != 1 else {
+                return enumerateAliveTargetPlayers(currentPlayer)[0]
+            }
+            print("Select player you wanna target : ")
+            showAliveTargetPlayers(currentPlayer)
+            if let entry = readLine() {
+                guard let index = Int(entry) else {
+                    print("Invalid entry")
+                    return selectTargetPlayer(from: currentPlayer, with: currentCharacter)
+                }
+                switch index {
+                case 1 ... enumerateAliveTargetPlayers(currentPlayer).count:
+                    return enumerateAliveTargetPlayers(currentPlayer)[index - 1]
+                default:
+                    print("This player doesn't exist")
+                    return selectTargetPlayer(from: currentPlayer, with: currentCharacter)
+                }
             }
         }
-        return selectTargetPlayer(from: currentPlayer)
+        return selectTargetPlayer(from: currentPlayer, with: currentCharacter)
     }
 
     //check if the game is over
