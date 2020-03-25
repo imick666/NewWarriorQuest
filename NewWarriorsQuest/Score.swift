@@ -14,9 +14,6 @@ class Score {
         determinateWinner()
     }
 
-    init() {
-    }
-
     //player score table
     func showScoreTable() {
         print("""

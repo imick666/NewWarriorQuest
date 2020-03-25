@@ -69,16 +69,6 @@ class Player {
             """)
         }
     }
-
-    //ask what to do
-    func actions(from currentPlayer: Player, with currentCharacter: Character, to currentTarget: Player) {
-        switch currentTarget.playerNumber == currentPlayer.playerNumber {
-        case true:
-            currentCharacter.heal(with: currentCharacter, to: currentTarget)
-        case false:
-            currentCharacter.attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
-        }
-    }
 //----------------------------------------
 // MARK: PRIVATE FUNCTION
 //----------------------------------------
@@ -91,20 +81,12 @@ class Player {
         """)
         if let entry = readLine() {
             //check if player name already exist
-            for name in Player.nicknameList {
-                guard entry != name else {
-                    print("nickname already exist")
-                    return createPlayer(playerNumber)
-                }
+            guard !Player.nicknameList.contains(entry.lowercased()) && !Character.namesList.contains(entry.lowercased()) else {
+                print("this name already exist")
+                return createPlayer(playerNumber)
             }
-            for name in Character.namesList {
-                guard entry != name else {
-                    print("nickname already exist")
-                    return createPlayer(playerNumber)
-                }
-            }
-            Player.nicknameList.append(entry)
-            nickname = entry
+            Player.nicknameList.append(entry.lowercased())
+            nickname = entry.lowercased()
             self.playerNumber = playerNumber
         }
         //create team
@@ -142,7 +124,6 @@ class Player {
         character.name = namingChar()
 
         return character
-
     }
 
     private func namingChar() -> String {
@@ -154,21 +135,13 @@ class Player {
                 return namingChar()
             }
             //check if name alwready used in current team
-            for name in Character.namesList {
-                guard entry != name else {
-                    print("name already used")
-                    return namingChar()
-                }
+            guard !Player.nicknameList.contains(entry.lowercased()) && !Character.namesList.contains(entry.lowercased()) else {
+                print("this name already exist")
+                return namingChar()
             }
-            for name in Player.nicknameList {
-                guard entry != name else {
-                    print("name already used for a player")
-                    return namingChar()
-                }
-            }
-            Character.namesList.append(entry)
+            Character.namesList.append(entry.lowercased())
             //pickup name
-            return entry
+            return entry.lowercased()
         }
         return namingChar()
     }

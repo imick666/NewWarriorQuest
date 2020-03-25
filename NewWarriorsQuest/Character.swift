@@ -49,40 +49,40 @@ class Character {
 //---------------------------------
 // MARK: - FUNCTION
 //---------------------------------
-    func attack(from currentPlayer: Player, to currentTarget: Player, with currentCharacter: Character) {
+    func attack(to currentTarget: Player) {
         print("select character you wanna attack : ")
         currentTarget.showAliveCharacters()
 
         if let entry = readLine() {
             guard let index = Int(entry) else {
                 print("Invalid entry")
-                return attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
+                return attack(to: currentTarget)
             }
 
             switch index {
             case 1 ... currentTarget.enumerateAliveCharacters().count:
-                currentTarget.enumerateAliveCharacters()[index - 1].lifePoint -= currentCharacter.weapon.attack
+                currentTarget.enumerateAliveCharacters()[index - 1].lifePoint -= self.weapon.attack
             default:
                 print("Invalid entry")
-                return attack(from: currentPlayer, to: currentTarget, with: currentCharacter)
+                return attack(to: currentTarget)
             }
         }
     }
 
-    func heal(with currentCharacter: Character, to currentPlayer: Player) {
+    func heal(to currentPlayer: Player) {
         print("who do you wanna heal?")
         currentPlayer.showAliveCharacters()
         if let entry = readLine() {
             guard let index = Int(entry) else {
                 print("Invalid entry")
-                return heal(with: currentCharacter, to: currentPlayer)
+                return heal(to: currentPlayer)
             }
             switch index {
             case 1 ... currentPlayer.enumerateAliveCharacters().count:
-                currentPlayer.enumerateAliveCharacters()[index - 1].lifePoint += currentCharacter.weapon.heal
+                currentPlayer.enumerateAliveCharacters()[index - 1].lifePoint += self.weapon.heal
             default:
                 print("Invalid entry")
-                return heal(with: currentCharacter, to: currentPlayer)
+                return heal(to: currentPlayer)
             }
         }
     }

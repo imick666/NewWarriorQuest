@@ -68,11 +68,11 @@
 			isa = PBXGroup;
 			children = (
 				E0AB85082420DA9800AD09AA /* main.swift */,
-				08B6F9F22423DA1B00C6C1CC /* Score.swift */,
 				E0AB85152420DBFB00AD09AA /* Game.swift */,
 				E0AB850F2420DAA300AD09AA /* Player.swift */,
 				E0AB85112420DB1300AD09AA /* Character.swift */,
 				E0AB85132420DB7300AD09AA /* Weapon.swift */,
+				08B6F9F22423DA1B00C6C1CC /* Score.swift */,
 			);
 			path = NewWarriorsQuest;
 			sourceTree = "<group>";
@@ -105,7 +105,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "mickael ruzel";
 				TargetAttributes = {
 					E0AB85042420DA9800AD09AA = {
@@ -284,6 +284,7 @@
 		E0AB850D2420DA9800AD09AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -293,6 +294,7 @@
 		E0AB850E2420DA9800AD09AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
