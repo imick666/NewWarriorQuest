@@ -35,6 +35,7 @@
 		E0AB85112420DB1300AD09AA /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		E0AB85132420DB7300AD09AA /* Weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
 		E0AB85152420DBFB00AD09AA /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		E0E94C312785B7E0000573DD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +52,7 @@
 		E0AB84FC2420DA9800AD09AA = {
 			isa = PBXGroup;
 			children = (
+				E0E94C312785B7E0000573DD /* README.md */,
 				E0AB85072420DA9800AD09AA /* NewWarriorsQuest */,
 				E0AB85062420DA9800AD09AA /* Products */,
 			);

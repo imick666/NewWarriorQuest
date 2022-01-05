@@ -96,7 +96,13 @@ class Game {
     }
 
     private func battle() {
-        print("\n---FIGHT---\n")
+        print("""
+        
+        -------------
+        --- FIGHT ---
+        -------------
+        
+        """)
         //--------------------------
         // MARK: FIGHT
         //--------------------------
@@ -129,7 +135,13 @@ class Game {
             score.round += 1
             var actions: Action = .attack
             //show round number
-            print("ROUND \(score.round)")
+            print("""
+                  
+            \(String(repeating: "-", count: 15))
+            --- ROUND \(score.round) ---
+            \(String(repeating: "-", count: 15))
+                  
+            """)
             //0 - switch on each alive player
             for currentPlayer in players where !currentPlayer.isDead {
                 //print the current player

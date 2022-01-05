@@ -76,13 +76,13 @@ class Player {
 //----------------------------------------
     private func createPlayer(_ playerNumber: Int) {
         print("""
-        Player \(playerNumber)
-        Enter your Nickname :
+        
+        Player \(playerNumber) Enter your Nickname :
         """)
         if let entry = readLine() {
             //check if player name already exist
             guard !Player.nicknameList.contains(entry.lowercased()) && !Character.namesList.contains(entry.lowercased()) else {
-                print("this name already exist")
+                print("!! this name already exist !!")
                 return createPlayer(playerNumber)
             }
             Player.nicknameList.append(entry.lowercased())
@@ -94,20 +94,31 @@ class Player {
         repeat {
             team.append(createCharacter())
         }while team.count < 3
+        
+        print("""
+        
+        \(String(repeating: "-", count: nickname.count + 33))
+        --- \(nickname): You're team is complete ---
+        \(String(repeating: "-", count: nickname.count + 34))
+        """)
     }
 
     private func createCharacter() -> Character {
         var character = Character(name: "", race: .elfs)
 
         print("""
-            It miss \(3 - team.count) characters in your team
+        
+        \(String(repeating: "-", count: 44))
+        --- It missing \(3 - team.count) characters in your team ---
+        \(String(repeating: "-", count: 44))
 
-            Choose your character:
+        Choose your character:
 
-            1 - Elf : 500 PV and 90 attack
-            2 - Dwarf : 700 PV and 150 attack
-            3 - Orc : 1000 PV and 100 attack
-            """)
+        1 - Elf : 500 PV and 90 attack
+        2 - Dwarf : 700 PV and 150 attack
+        3 - Orc : 1000 PV and 100 attack
+        """)
+        
         if let entry = readLine() {
             switch entry {
             case "1":
@@ -123,6 +134,8 @@ class Player {
         }
         character.name = namingChar()
 
+        
+        
         return character
     }
 
@@ -131,12 +144,12 @@ class Player {
         if let entry = readLine() {
             //check if name less than 3 characters
             guard entry.count > 3 else {
-                print("Name is to short")
+                print("!! Name is to short !!")
                 return namingChar()
             }
             //check if name alwready used in current team
             guard !Player.nicknameList.contains(entry.lowercased()) && !Character.namesList.contains(entry.lowercased()) else {
-                print("this name already exist")
+                print("!! this name already exist !!")
                 return namingChar()
             }
             Character.namesList.append(entry.lowercased())
